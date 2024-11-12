@@ -5,28 +5,28 @@ services:
     ports:
       - "5001:5000"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/ecommerce
+      - MONGO_URI=mongodb://mongo:27017/devops-final-project
 
   product-service:
     build: ./product-service
     ports:
       - "5002:5000"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/ecommerce
+      - MONGO_URI=mongodb://mongo:27017/devops-final-project
 
   order-service:
     build: ./order-service
     ports:
       - "5003:5000"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/ecommerce
+      - MONGO_URI=mongodb://mongo:27017/devops-final-project
 
   cart-service:
     build: ./cart-service
     ports:
       - "5004:5000"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/ecommerce
+      - MONGO_URI=mongodb://mongo:27017/devops-final-project
 
   mongo:
     image: mongo
