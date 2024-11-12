@@ -9,6 +9,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 app.use('/api/orders', orderRoutes);
 
-app.listen(5003, () => console.log('Order Service running on port 5003'));
+app.listen(5000, () => console.log('Order Service running on port 5003'));
 
 module.exports = app; // for testing
