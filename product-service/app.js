@@ -9,6 +9,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 app.use('/api/products', productRoutes);
 
-app.listen(5002, () => console.log('Product Service running on port 5000'));
+app.listen(5002, () => console.log('Product Service running on port 5002'));
 
 module.exports = app;  // for testing

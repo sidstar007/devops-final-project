@@ -9,4 +9,4 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 app.use('/api/users', userRoutes);
 
-app.listen(5001, () => console.log('User Service running on port 5000'));
+app.listen(5001, () => console.log('User Service running on port 5001'));
