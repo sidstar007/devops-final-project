@@ -18,17 +18,17 @@ describe('User Service', () => {
 
   it('should create a new user', async () => {
     const res = await request(app).post('/api/users').send({
-      name: 'John Doe',
-      email: 'john@example.com',
-      password: '123456',
+      name: 'John Doeee',
+      email: 'john@eeexample.com',
+      password: '123123456',
     });
     expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('name', 'John Doe');
-    expect(res.body).toHaveProperty('email', 'john@example.com');
+    expect(res.body).toHaveProperty('name', 'John Doeee');
+    expect(res.body).toHaveProperty('email', 'john@eeexample.com');
   });
 
   it('should get a user by ID', async () => {
-    const user = await User.create({ name: 'Jane Doe', email: 'jane@example.com', password: '123456' });
+    const user = await User.create({ name: 'John Doee', email: 'john@eeexample.com', password: '123123456' });
     const res = await request(app).get(`/api/users/${user._id}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('name', 'Jane Doe');
