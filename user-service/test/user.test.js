@@ -5,12 +5,15 @@ const User = require('../models/User');
 
 describe('User Service', () => {
   beforeAll(async () => {
-    await mongoose.connect('mongodb+srv://24aaryan00:XE1lgXbpxaEs3elB@cluster0.qsbsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    await mongoose.connect('mongodb+srv://24aaryan00:XE1lgXbpxaEs3elB@cluster0.qsbsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   });
 
   afterAll(async () => {
-    await User.deleteMany({});  // Cleanup any users created during tests
-    await mongoose.connection.close();  // Close the DB connection
+    await User.deleteMany({}); // Cleanup users created during tests
+    await mongoose.connection.close(); // Close DB connection
   });
 
   it('should create a new user', async () => {
@@ -25,7 +28,6 @@ describe('User Service', () => {
   });
 
   it('should get a user by ID', async () => {
-    // Create a test user directly in the database
     const user = await User.create({ name: 'Jane Doe', email: 'jane@example.com', password: '123456' });
     const res = await request(app).get(`/api/users/${user._id}`);
     expect(res.statusCode).toEqual(200);
