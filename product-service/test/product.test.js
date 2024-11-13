@@ -5,7 +5,7 @@ const Product = require('../models/Product');
 
 describe('Product Service', () => {
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect('mongodb+srv://24aaryan00:XE1lgXbpxaEs3elB@cluster0.qsbsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
   });
 
   afterAll(async () => {
