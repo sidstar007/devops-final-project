@@ -7,7 +7,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo:27017/devops-final-project
     depends_on:
-      - mongo  # Ensures MongoDB starts before this service
+      - mongo
 
   product-service:
     build: ./product-service
@@ -42,6 +42,11 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: "mongo --eval 'db.runCommand({ ping: 1 })'"
+      interval: 10s
+      timeout: 10s
+      retries: 3
 
 volumes:
   mongo-data:
