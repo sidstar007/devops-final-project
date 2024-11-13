@@ -6,6 +6,8 @@ services:
       - "5001:5000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/devops-final-project
+    depends_on:
+      - mongo  # Ensures MongoDB starts before this service
 
   product-service:
     build: ./product-service
@@ -13,6 +15,8 @@ services:
       - "5002:5000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/devops-final-project
+    depends_on:
+      - mongo
 
   order-service:
     build: ./order-service
@@ -20,6 +24,8 @@ services:
       - "5003:5000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/devops-final-project
+    depends_on:
+      - mongo
 
   cart-service:
     build: ./cart-service
@@ -27,6 +33,8 @@ services:
       - "5004:5000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/devops-final-project
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
