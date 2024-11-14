@@ -24,7 +24,7 @@ pipeline {
                             script {
                                 echo 'Building and testing User Service...'
                                 sh 'docker build -t user-service .'
-                                sh 'docker run --rm user-service npm test || true' // Allow test to fail gracefully
+                                sh 'docker run --rm user-service npm test || true'
                             }
                         }
                     }
@@ -36,7 +36,7 @@ pipeline {
                             script {
                                 echo 'Building and testing Product Service...'
                                 sh 'docker build -t product-service .'
-                                sh 'docker run --rm product-service npm test || true' // Allow test to fail gracefully
+                                sh 'docker run --rm product-service npm test || true'
                             }
                         }
                     }
@@ -48,7 +48,7 @@ pipeline {
                             script {
                                 echo 'Building and testing Order Service...'
                                 sh 'docker build -t order-service .'
-                                sh 'docker run --rm order-service npm test || true' // Allow test to fail gracefully
+                                sh 'docker run --rm order-service npm test || true'
                             }
                         }
                     }
@@ -72,8 +72,8 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying services with Docker Compose...'
-                    sh 'docker-compose down || true' // Stop existing containers if running
-                    sh 'docker-compose up -d --build' // Start all services in detached mode
+                    sh 'docker-compose down || true'
+                    sh 'docker-compose up -d --build'
                 }
             }
         }
@@ -83,7 +83,7 @@ pipeline {
         always {
             script {
                 echo 'Cleaning up Docker containers...'
-                sh 'docker-compose down || true' // Ensure all services are stopped
+                sh 'docker-compose down || true'
             }
         }
         success {
