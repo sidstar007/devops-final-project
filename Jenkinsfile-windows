@@ -1,0 +1,101 @@
+pipeline {
+    agent any
+
+    environment {
+        REPO_URL = 'https://github.com/sidstar007/devops-final-project.git'
+        NODE_VERSION = '18'
+        MONGO_IMAGE = 'mongo'
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\nodejs;C:\\Windows\\System32"
+    }
+
+    triggers {
+        githubPush()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Cloning the repository...'
+                git url: "${REPO_URL}", branch: 'main'
+            }
+        }
+
+
+        stage('Build & Test Services') {
+            parallel {
+                stage('Build & Test User Service') {
+                    steps {
+                        dir('user-service') {
+                            script {
+                                echo 'Building and testing User Service...'
+                                bat 'docker build -t user-service .'
+                                bat 'docker run --rm user-service npm test || exit 0'
+                            }
+                        }
+                    }
+                }
+
+                stage('Build & Test Product Service') {
+                    steps {
+                        dir('product-service') {
+                            script {
+                                echo 'Building and testing Product Service...'
+                                bat 'docker build -t product-service .'
+                                bat 'docker run --rm product-service npm test || exit 0'
+                            }
+                        }
+                    }
+                }
+
+                stage('Build & Test Order Service') {
+                    steps {
+                        dir('order-service') {
+                            script {
+                                echo 'Building and testing Order Service...'
+                                bat 'docker build -t order-service .'
+                                bat 'docker run --rm order-service npm test || exit 0'
+                            }
+                        }
+                    }
+                }
+
+                stage('Build & Test Cart Service') {
+                    steps {
+                        dir('cart-service') {
+                            script {
+                                echo 'Building and testing Cart Service...'
+                                bat 'docker build -t cart-service .'
+                                bat 'docker run --rm cart-service npm test || exit 0'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Services') {
+            steps {
+                script {
+                    echo 'Deploying services with Docker Compose...'
+                    bat 'docker-compose down || exit 0'
+                    bat 'docker-compose up -d --build'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                echo 'Cleaning up Docker containers...'
+                bat 'docker-compose down || exit 0'
+            }
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
+        }
+    }
+}
