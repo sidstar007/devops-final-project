@@ -31,14 +31,14 @@ describe('User Service', () => {
 
   it('should create a new user', async () => {
     const res = await request(app).post('/api/users').send({
-      name: 'John Doe',
-      email: 'john@example.com',
+      name: 'Jane Doe',
+      email: 'jane@example.com',
       password: '123456',
-      username: 'john_doe', // Ensure unique username
+      username: 'jane_doe', // Ensure unique username
     });
     expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('name', 'John Doe');
-    expect(res.body).toHaveProperty('email', 'john@example.com');
+    expect(res.body).toHaveProperty('name', 'Jane Doe');
+    expect(res.body).toHaveProperty('email', 'jane@example.com');
   });
 
   it('should get a user by ID', async () => {
