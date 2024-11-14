@@ -23,8 +23,6 @@ const app = express();
 app.use(express.json());
 
 mongoose.connect('mongodb+srv://24aaryan00:XE1lgXbpxaEs3elB@cluster0.qsbsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
 });
 
 app.use('/api/users', userRoutes);
