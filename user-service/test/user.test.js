@@ -1,4 +1,3 @@
-require('dotenv').config();  // Load environment variables from .env file if present
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
