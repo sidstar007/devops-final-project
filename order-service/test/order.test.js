@@ -1,15 +1,26 @@
+require('dotenv').config();  // Load environment variables from .env file if present
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
 const Order = require('../models/Order');
 
 describe('Order Service', () => {
+  // Connect to the database before running tests
   beforeAll(async () => {
-    await mongoose.connect('mongodb+srv://24aaryan00:XE1lgXbpxaEs3elB@cluster0.qsbsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/devops-final-project';
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   });
 
-  afterAll(async () => {
+  // Clear the Order collection after each test to maintain isolation
+  afterEach(async () => {
     await Order.deleteMany({});
+  });
+
+  // Close the database connection after all tests complete
+  afterAll(async () => {
     await mongoose.connection.close();
   });
 
@@ -22,12 +33,26 @@ describe('Order Service', () => {
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty('userId', '12345');
     expect(res.body).toHaveProperty('totalAmount', 300);
+    expect(res.body).toHaveProperty('products');
+    expect(res.body.products[0]).toHaveProperty('productId', '67890');
+    expect(res.body.products[0]).toHaveProperty('quantity', 2);
   });
 
   it('should get an order by ID', async () => {
-    const order = await Order.create({ userId: '12345', products: [{ productId: '67890', quantity: 2 }], totalAmount: 300 });
+    // Insert an order directly into the database
+    const order = await Order.create({
+      userId: '12345',
+      products: [{ productId: '67890', quantity: 2 }],
+      totalAmount: 300,
+    });
+
+    // Fetch the order by ID
     const res = await request(app).get(`/api/orders/${order._id}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('userId', '12345');
+    expect(res.body).toHaveProperty('totalAmount', 300);
+    expect(res.body).toHaveProperty('products');
+    expect(res.body.products[0]).toHaveProperty('productId', '67890');
+    expect(res.body.products[0]).toHaveProperty('quantity', 2);
   });
 });

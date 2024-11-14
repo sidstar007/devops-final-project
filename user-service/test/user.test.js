@@ -1,16 +1,27 @@
+require('dotenv').config();  // Load environment variables from .env file if present
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
 const User = require('../models/User');
 
 describe('User Service', () => {
+  // Connect to the database before running tests
   beforeAll(async () => {
-    await mongoose.connect('mongodb+srv://24aaryan00:XE1lgXbpxaEs3elB@cluster0.qsbsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/devops-final-project';
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   });
 
+  // Clear the User collection after each test to maintain isolation
+  afterEach(async () => {
+    await User.deleteMany({});
+  });
+
+  // Close the database connection after all tests complete
   afterAll(async () => {
-    await User.deleteMany({});  // Cleanup any users created during tests
-    await mongoose.connection.close();  // Close the DB connection
+    await mongoose.connection.close();
   });
 
   it('should create a new user', async () => {
@@ -18,6 +29,7 @@ describe('User Service', () => {
       name: 'John Doe',
       email: 'john@example.com',
       password: '123456',
+      username: 'john_doe', // Ensure unique username
     });
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty('name', 'John Doe');
@@ -25,8 +37,15 @@ describe('User Service', () => {
   });
 
   it('should get a user by ID', async () => {
-    // Create a test user directly in the database
-    const user = await User.create({ name: 'Jane Doe', email: 'jane@example.com', password: '123456' });
+    // Insert a user directly into the database
+    const user = await User.create({
+      name: 'Jane Doe',
+      email: 'jane@example.com',
+      password: '123456',
+      username: 'jane_doe', // Ensure unique username
+    });
+
+    // Fetch the user by ID
     const res = await request(app).get(`/api/users/${user._id}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('name', 'Jane Doe');
