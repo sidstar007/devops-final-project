@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const app = require('../app');
 const User = require('../models/User');
 
+// Extend Jest timeout to handle any slow database connection issues
+jest.setTimeout(30000);
+
 describe('User Service', () => {
   // Connect to the database before running tests
   beforeAll(async () => {
@@ -20,7 +23,10 @@ describe('User Service', () => {
 
   // Close the database connection after all tests complete
   afterAll(async () => {
-    await mongoose.connection.close();
+    // Ensure the connection is closed only if it's still open
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+    }
   });
 
   it('should create a new user', async () => {
