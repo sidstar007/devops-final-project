@@ -60,7 +60,7 @@ pipeline {
                             script {
                                 echo 'Building and testing Cart Service...'
                                 sh 'docker build -t cart-service .'
-                                sh 'docker run --rm cart-service npm test || true' // Allow test to fail gracefully
+                                sh 'docker run --rm cart-service npm test || true' // Allow test
                             }
                         }
                     }
